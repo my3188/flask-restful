@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 import random
 import os
+from datetime import datetime
 from flask import Flask, session, request
 from flask_restful import reqparse, abort, Api, Resource, fields, marshal_with
 from resources.user import User
@@ -25,41 +26,96 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = setSqlLiteAbsPath()
+
 # app.config['SQLALCHEMY_DATABASE_URI'] = setSqlLiteRelativePath()
 
 
 
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
-class Users(db.Model):
-    # __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120), unique=True)
+# class Users(db.Model):
+#     __tablename__ = 'users'
+#     id = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.String(80), unique=True)
+#     email = db.Column(db.String(120), unique=True)
 
-    def __init__(self, username, email):
-        self.username = username
-        self.email = email
+#     def __init__(self, username, email):
+#         self.username = username
+#         self.email = email
 
+#     def __repr__(self):
+#         return '<User %r>' % self.username
+
+
+# # 内容
+# class Post(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     title = db.Column(db.String(80))
+#     body = db.Column(db.Text)
+#     pub_date = db.Column(db.DateTime)
+
+#     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+#     category = db.relationship('Category',
+#                                backref=db.backref('posts', lazy='dynamic'))
+
+#     def __init__(self, title, body, category, pub_date=None):
+#         self.title = title
+#         self.body = body
+#         if pub_date is None:
+#             pub_date = datetime.utcnow()
+#         self.pub_date = pub_date
+#         self.category = category
+
+#     def __repr__(self):
+#         return '<Post %r>' % self.title
+
+# # 类别
+# class Category(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(50))
+
+#     def __init__(self, name):
+#         self.name = name
+
+#     def __repr__(self):
+#         return '<Category %r>' % self.name
+
+
+# class Person(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(50))
+    
+#     # email = db.relationship('EmailAddress', backref='person',
+#     #                             lazy='dynamic')
+
+#     def __init__(self, name):
+#         self.name = name
+#         # self.email = email
+
+
+# class EmailAddress(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     email = db.Column(db.String(50))
+#     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
+
+#     person = db.relationship(
+#         'Person', backref=db.backref('emails', lazy='dynamic'))
+
+#     def __init__(self, email,person):
+#         self.email = email
+#         self.person = person
+
+# class Role(db.Model):
+  
+    __tablename__ = "roles"
+    id = db.Column(db.Integer,primary_key=True)
+    name = db.Column(db.String(16),unique=True)
+    # 给Role类创建一个uses属性，关联users表。
+    # backref是反向的给User类创建一个role属性，关联roles表。这是flask特殊的属性。
+    # users = db.relationship('User',backref="role")
+    # 相当于__str__方法。
     def __repr__(self):
-        return '<User %r>' % self.username
-
-
-# db.create_all()
-
-# num = 100
-# while num>0:
-#     admin = Users('admin'+str(num), 'admin@example.com'+str(num))
-#     db.session.add(admin)
-#     num = num-1
-# admin = Users('admin', 'admin@example.com')
-# guest = Users('guest', 'guest@example.com')
-# db.session.add(admin)
-# db.session.add(guest)
-# db.session.commit()
-# db.session.close()
-usersRS = Users.query.all()
-print(usersRS)
+        return "Role: %s %s" % (self.id,self.name)
 
 
 @app.before_request

@@ -1,12 +1,13 @@
 from app import db
-from model import User, UserInfo, Article, Category, Tag
+from model import Users, Post, Category, Person, EmailAddress, Role
 db.drop_all()
 db.create_all()
 
-
-
-
-
+# num = 100
+# while num>0:
+#     admin = Users('admin'+str(num), 'admin@example.com'+str(num))
+#     db.session.add(admin)
+#     num = num-1
 admin = Users('admin', 'admin@example.com')
 guest = Users('guest', 'guest@example.com')
 
